@@ -51,12 +51,12 @@ int main()
 		}
 		else
 		{
-			if(pre(stack[top])<=pre(infix[i]))
+			if(pre(stack[top])>=pre(infix[i]))
 				push(infix[i],stack,&top);
 			else
 			{
 				while(pre(stack[top])>=pre(infix[i]))
-					e=pop(stack,&top); //and also print e
+					e=pop(stack,&top);
 				push(infix[i],stack,&top);
 			}
 		}
