@@ -1,0 +1,70 @@
+#include <stdio.h>
+#include <stdlib.h>
+int MAX_SIZE=10;
+int top=-1;
+int stack[10];
+void push(int ele)
+{
+    if(top==MAX_SIZE-1)
+    {
+        printf("Stack Full.\n");
+    }
+    else{
+        stack[++top]=ele;
+    }
+}
+int pop()
+{ int x;
+    if(top==-1)
+    {
+        printf("Stack empty\n");
+    }
+    else
+    {
+       x=stack[top];
+       top--;
+        return x;
+    }
+}
+
+void display()
+{
+    int p=top;
+    printf("The stack is:\t");
+    if(p==-1)
+        printf("Empty Stack\n");
+    while(p!=-1)
+    {
+        printf("%d\t",stack[p]);
+        p--;
+    }
+
+}
+
+void main()
+{    int x;
+    int i;
+    int ch;
+    do{
+    printf("\nEnter the which function to be performed\n1.push()\n2.pop()\n3.Display\n4.Exit\n");
+    scanf("%d",&ch);
+
+    switch(ch)
+    {
+    case(1):printf("Enter number to be inserted\n");
+            scanf("%d",&i);
+            push(i);
+            break;
+    case(2):x=pop(top);
+            printf("Element popped is%d\n",x);
+            break;
+    case(3):display(top);
+            break;
+    case(4):exit(0);
+    default:printf("\nWrong choice.Try Again.");
+            break;
+
+    }
+    }while(ch!=4);
+
+}
