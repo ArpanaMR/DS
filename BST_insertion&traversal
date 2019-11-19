@@ -1,0 +1,90 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct tree
+{
+int data;
+struct tree*lchild;
+struct tree*rchild;
+};
+typedef struct tree* NODE;
+
+NODE getnode(int item);
+void inorder(NODE root);
+NODE insert(NODE root,int item);
+void preorder(NODE root);
+void postorder(NODE root);
+
+NODE getnode(int item)
+{
+NODE p;
+p=(NODE)malloc(sizeof(struct tree));
+p->data=item;
+p->lchild=NULL;
+p->rchild=NULL;
+return p;
+}
+
+NODE insert(NODE root,int item)
+{
+if(root==NULL)
+return getnode(item);
+if(item<root->data)
+root->lchild=insert(root->lchild,item);
+if(item>root->data)
+root->rchild=insert(root->rchild,item);
+return root;
+}
+
+void inorder(NODE root)
+{
+if(root==NULL)
+ return;
+inorder(root->lchild);
+printf("%d\n",root->data);
+inorder(root->rchild);
+}
+ 
+
+void preorder(NODE root)
+{
+if(root==NULL)
+ return;
+printf("%d\n",root->data);
+inorder(root->lchild);
+inorder(root->rchild);
+}
+ 
+void postorder(NODE root)
+{
+if(root==NULL)
+ return;
+inorder(root->lchild);
+inorder(root->rchild);
+printf("%d\n",root->data);
+}
+
+
+int main()
+{int ch,ele;
+NODE root=getnode(8);
+do{
+printf("\nEnter\n1.Insert\n2.Inorder Traversal\n3.Preorder Traversal\n4.postorder Traversal\n6.Exit\n");
+scanf("%d",&ch);
+switch(ch)
+{
+ case(1):printf("Enter value\n");
+         scanf("%d",&ele);
+         insert(root,ele);
+          break;
+case(2):inorder(root);
+         break;
+case(3):preorder(root);
+         break;
+case(4):postorder(root);
+        break;
+
+case(6):exit(0);
+default:printf("Wrong choice");
+}
+}while(ch!=6);
+}
