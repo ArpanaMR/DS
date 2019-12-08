@@ -1,0 +1,314 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct tree
+{
+int data;
+struct tree*lchild;
+struct tree*rchild;
+};
+typedef struct tree* NODE;
+int count=0;
+NODE getnode(int item);
+void inorder(NODE root);
+NODE insert(NODE root,int item);
+void preorder(NODE root);
+void postorder(NODE root);
+
+NODE getnode(int item)
+{
+NODE p;
+p=(NODE)malloc(sizeof(struct tree));
+p->data=item;
+p->lchild=NULL;
+p->rchild=NULL;
+return p;
+}
+
+NODE insert(NODE root,int item)
+{
+if(root==NULL)
+return getnode(item);
+if(item<root->data)
+root->lchild=insert(root->lchild,item);
+if(item>root->data)
+root->rchild=insert(root->rchild,item);
+return root;
+}
+
+void inorder(NODE root)
+{
+if(root==NULL)
+ return;
+inorder(root->lchild);
+printf("%d\n",root->data);
+inorder(root->rchild);
+}
+
+
+void preorder(NODE root)
+{
+if(root==NULL)
+ return;
+printf("%d\n",root->data);
+inorder(root->lchild);
+inorder(root->rchild);
+}
+
+void postorder(NODE root)
+{
+if(root==NULL)
+ return;
+inorder(root->lchild);
+inorder(root->rchild);
+printf("%d\n",root->data);
+}
+
+int height(NODE root)
+{
+	int lht,rht;
+	if(root==NULL)
+		return 0;
+	else
+	{
+		lht=height(root->lchild);
+		rht=height(root->rchild);
+		if(lht>rht)
+			return (lht+1);
+		else
+			return (rht+1);
+	}
+}
+
+void print(NODE root,int level)
+{
+	if(root==NULL)
+		return;
+	if(level==0)
+		printf("%d ",root->data);
+	else if(level>0)
+	{
+		print(root->lchild,(level-1));
+		print(root->rchild,(level-1));
+	}
+}
+
+NODE minvalue(NODE root)
+{
+    while(root->lchild!=NULL)
+    {
+        root=root->lchild;
+    }
+    return root;
+}
+
+NODE maxvalue(NODE root)
+{
+    while(root->rchild!=NULL)
+    {
+        root=root->rchild;
+    }
+    return root;
+}
+
+NODE delete(NODE root,int key)
+{
+    if(root==NULL)
+        return root;
+    if(key<root->data)
+        root->lchild=delete(root->lchild,key);
+    else if(root->data<key)
+        root->rchild=delete(root->rchild,key);
+    else
+    {
+        if(root->lchild==NULL)
+        {
+            NODE temp=root->rchild;
+            free(root);
+            return temp;
+        }
+        else if(root->rchild==NULL)
+        {
+            NODE temp=root->lchild;
+            free(root);
+            return temp;
+        }
+
+        NODE temp=minvalue(root->rchild);
+        root->data=temp->data;
+        root->rchild=delete(root->rchild,temp->data);
+    }
+    return root;
+}
+
+NODE search(NODE root,int key)
+{
+    if(root==NULL)
+        return root;
+    else
+    {
+        if(key<root->data)
+           root=delete(root->lchild,key);
+        else if(key>root->data)
+        root=delete(root->rchild,key);
+    }
+    if(root->data==key)
+        printf("Found");
+
+   return root;
+}
+
+int totalnodes(NODE root)
+{
+    if(root != NULL)
+    {
+        totalnodes(root->lchild);
+        count++;
+        totalnodes(root->rchild);
+    }
+    return count;
+}
+
+int Ext(NODE root)
+{
+    if(root != NULL)
+    {
+        Ext(root->lchild);
+        if(root->rchild==NULL&&root->lchild==NULL)
+        count++;
+        Ext(root->rchild);
+    }
+    return count;
+}
+
+int Int(NODE root)
+{
+    if(root != NULL)
+    {
+        Int(root->lchild);
+        if(root->rchild!=NULL||root->lchild!=NULL)
+        count++;
+        Int(root->rchild);
+    }
+    return count;
+}
+
+void isearch(NODE root,int key)
+{
+    while(root!=NULL)
+    {
+        if(key<root->data)
+            root=root->lchild;
+        else if(key>root->data)
+            root=root->rchild;
+        else
+           {printf("\nValue found\n");
+            return;
+                }
+    }
+    printf("\nValue not found\n");
+
+}
+
+
+/*NODE mirrorImage(NODE root)
+{
+NODE ptr;
+if(root!=NULL)
+{
+mirrorImage(root–>lchild);
+mirrorImage(root–>rchild);
+ptr=root–>lchild;
+ptr–>lchild = ptr–>rchild;
+root–>rchild = ptr;
+}
+}*/
+
+void delTree(NODE root)
+{
+    if(root!=NULL)
+    {
+        delTree(root->rchild);
+        delTree(root->lchild);
+        free(root);
+    }
+}
+
+int main()
+{int ch,ele,i,dep;
+printf("Enter root node value");
+scanf("%d",&ele);
+NODE p,root=getnode(ele);
+printf("\nEnter\n1.Insert\n2.Inorder Traversal\n3.Preorder Traversal\n4.postorder Traversal\n5.Display\n6.Delete\n7.Recusive Search\n8.Iterative Search\nMin Value\n10.MAx value\n11.Height\n12.Total number of nodes\n13.External nodes\n14.Internal nodes\n15.Dlete the tree\n-1.Exit\n");
+scanf("%d",&ch);
+do{
+
+switch(ch)
+{
+ case(1):printf("Enter value\n");
+         scanf("%d",&ele);
+         insert(root,ele);
+          break;
+case(2):inorder(root);
+         break;
+case(3):preorder(root);
+         break;
+case(4):postorder(root);
+        break;
+
+case(5):dep=height(root);
+          for(i=0;i<dep;i++)
+          {
+              print(root,i);
+              printf("\n");
+          }
+          break;
+case(6):printf("Enter value to be deleted");
+        scanf("%d",&ele);
+        delete(root,ele);
+        break;
+
+case(7):printf("Enter element to be searched");
+         scanf("%d",&ele);
+         search(root,ele);
+         break;
+
+case(9):p=minvalue(root);
+        printf("Min value is %d",p->data);
+        break;
+
+case(10):p=maxvalue(root);
+        printf("Min value is %d",p->data);
+        break;
+
+case(11):printf("the height of tree %d",height(root));
+          break;
+
+case(12):printf("Total nodes are %d",totalnodes(root));
+        count =0;
+         break;
+
+case(13):printf("External nodes are %d",Ext(root));
+         count=0;
+         break;
+
+case(14):printf("Internal nodes are %d",Int(root));
+         count=0;
+         break;
+
+case(8):printf("Enter element to be searched");
+         scanf("%d",&ele);
+         isearch(root,ele);
+         break;
+
+case(15):delTree(root);
+          break;
+
+
+default:printf("Wrong choice");
+}
+printf("Enter next choice");
+scanf("%d",&ch);
+}while(ch!=-1);
+return 0;
+}
+
